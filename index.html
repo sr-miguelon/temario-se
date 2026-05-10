@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oposiciones · Sistemas Electrónicos 590.124</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --ink-soft: #3d3d3d;
+    --ink-muted: #6b6b6b;
+    --paper: #f5f0e8;
+    --paper-warm: #ede8db;
+    --paper-card: #faf8f3;
+    --accent: #c0392b;
+    --accent-soft: #e8d5d3;
+    --accent-gold: #b8860b;
+    --border: #d4cfc4;
+    --border-strong: #a09890;
+    --code-bg: #1e1e2e;
+    --code-text: #cdd6f4;
+    --sidebar-w: 280px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.75;
+    font-size: 17px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 56px;
+  }
+  .header-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    text-decoration: none;
+  }
+  .header-brand span {
+    color: var(--accent);
+    font-style: italic;
+  }
+  .header-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #888;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── LAYOUT ── */
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* ── SIDEBAR ── */
+  aside {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    background: var(--paper-warm);
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+    padding: 2rem 0;
+  }
+  .sidebar-section {
+    padding: 0 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .sidebar-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .tema-list { list-style: none; }
+  .tema-list li { margin-bottom: 0.25rem; }
+  .tema-list a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.3;
+  }
+  .tema-list a:hover { background: var(--accent-soft); color: var(--accent); }
+  .tema-list a.active {
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+  }
+  .tema-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    background: rgba(0,0,0,0.08);
+    padding: 2px 5px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .tema-list a.active .tema-num { background: rgba(255,255,255,0.25); }
+
+  /* TOC inside sidebar */
+  .toc { list-style: none; }
+  .toc li { margin-bottom: 0.15rem; }
+  .toc a {
+    display: block;
+    padding: 0.3rem 0.5rem;
+    text-decoration: none;
+    color: var(--ink-muted);
+    font-size: 0.82rem;
+    border-radius: 3px;
+    transition: color 0.15s, background 0.15s;
+    line-height: 1.3;
+  }
+  .toc a:hover { color: var(--accent); background: var(--accent-soft); }
+  .toc .toc-sub a { padding-left: 1.2rem; font-size: 0.78rem; }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    flex: 1;
+    max-width: 820px;
+    padding: 3rem 4rem;
+    min-width: 0;
+  }
+
+  /* ── TEMA HEADER ── */
+  .tema-header {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--border-strong);
+  }
+  .tema-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    background: var(--accent-soft);
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+  .tema-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+  .tema-subtitle {
+    font-size: 1.05rem;
+    color: var(--ink-muted);
+    font-style: italic;
+    line-height: 1.5;
+    max-width: 680px;
+  }
+  .tema-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .meta-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-muted);
+  }
+  .meta-val {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+
+  /* ── INDICE CARD ── */
+  .indice-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 4px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 3rem;
+  }
+  .indice-card h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .indice-list {
+    list-style: none;
+    columns: 2;
+    column-gap: 2rem;
+  }
+  .indice-list li {
+    font-size: 0.9rem;
+    padding: 0.2rem 0;
+    color: var(--ink-soft);
+    break-inside: avoid;
+  }
+  .indice-list li a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.15s;
+  }
+  .indice-list li a:hover { color: var(--accent); }
+  .indice-list .sub {
+    padding-left: 1.5rem;
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+  }
+  .indice-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    margin-right: 0.4rem;
+  }
+
+  /* ── SECCIONES ── */
+  section { margin-bottom: 3rem; }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--border);
+    scroll-margin-top: 72px;
+  }
+  h2 .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-right: 0.5rem;
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    margin: 2rem 0 0.8rem;
+    scroll-margin-top: 72px;
+  }
+  h3 .sub-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent-gold);
+    margin-right: 0.4rem;
+  }
+
+  p { margin-bottom: 1rem; }
+
+  strong { color: var(--ink); font-weight: 600; }
+  em { font-style: italic; color: var(--ink-soft); }
+
+  /* ── LISTAS ── */
+  ul, ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  li { margin-bottom: 0.35rem; }
+  li strong { color: var(--accent); }
+
+  /* ── CÓDIGO / DIAGRAMAS ── */
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    padding: 1.25rem 1.5rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+    border: 1px solid #313244;
+  }
+  code:not(pre code) {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82em;
+    background: var(--paper-warm);
+    color: var(--accent);
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+  .fig-caption {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    text-align: center;
+    font-style: italic;
+    margin-top: -1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ── TABLAS ── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0 1.5rem; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.6rem 1rem;
+    text-align: left;
+  }
+  td {
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: var(--paper-warm); }
+  tr:hover td { background: var(--accent-soft); }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-left: 3px solid var(--accent-gold);
+    background: #fefbf0;
+    padding: 1rem 1.25rem;
+    border-radius: 0 4px 4px 0;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.92rem;
+  }
+  .callout strong {
+    color: var(--accent-gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem 2rem;
+    margin: 1rem 0 1.5rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1rem;
+    color: var(--ink);
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .formula-item {
+    text-align: center;
+  }
+  .formula-label {
+    font-size: 0.7rem;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .formula-eq {
+    font-size: 1.05rem;
+    color: var(--accent);
+  }
+
+  /* ── BIBLIO ── */
+  .biblio-list { list-style: none; padding: 0; }
+  .biblio-item {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  .biblio-item::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.8rem;
+  }
+  .biblio-authors { font-style: italic; color: var(--ink-muted); }
+  .biblio-title { font-weight: 600; color: var(--ink); }
+  .biblio-pub { color: var(--ink-muted); font-size: 0.85rem; }
+  .biblio-note {
+    font-size: 0.8rem;
+    color: var(--accent-gold);
+    font-style: italic;
+    margin-top: 0.2rem;
+  }
+
+  /* ── NORMATIVA ── */
+  .norm-list { list-style: none; padding: 0; }
+  .norm-item {
+    padding: 0.7rem 0;
+    border-bottom: 1px dotted var(--border);
+    font-size: 0.88rem;
+    padding-left: 1.5rem;
+    position: relative;
+  }
+  .norm-item::before {
+    content: '§';
+    position: absolute;
+    left: 0;
+    color: var(--accent-gold);
+    font-weight: bold;
+  }
+
+  /* ── CONCLUSION ── */
+  .conclusion-box {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2rem 2.5rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+  }
+  .conclusion-box p { color: #d4cfc4; line-height: 1.8; }
+  .conclusion-box p:last-child { margin-bottom: 0; }
+
+  /* ── SEPARADOR DECORATIVO ── */
+  .ornament {
+    text-align: center;
+    color: var(--border-strong);
+    font-size: 1.2rem;
+    margin: 2rem 0;
+    letter-spacing: 0.5rem;
+  }
+
+  /* ── SCROLL PROGRESS ── */
+  #progress {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    height: 3px;
+    background: var(--accent);
+    z-index: 200;
+    transition: width 0.1s;
+    width: 0%;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    aside { display: none; }
+    main { padding: 2rem 1.5rem; }
+    .indice-list { columns: 1; }
+    .tema-meta { flex-wrap: wrap; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+
+<header>
+  <div class="header-inner">
+    <a class="header-brand" href="#">Oposiciones · <span>Sistemas Electrónicos</span></a>
+    <span class="header-meta">590.124 · P.E.S. Andalucía 2026</span>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Temas desarrollados</div>
+      <ul class="tema-list">
+        <li>
+          <a href="#tema31" class="active">
+            <span class="tema-num">T·31</span>
+            Elementos complementarios digitales
+          </a>
+        </li>
+        <!-- Aquí se irán añadiendo nuevos temas -->
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-label">Índice — Tema 31</div>
+      <ul class="toc">
+        <li><a href="#intro">1. Introducción</a></li>
+        <li><a href="#osciladores">2. Osciladores digitales</a></li>
+        <ul class="toc-sub toc">
+          <li><a href="#osc-concepto">2.1 Concepto y función</a></li>
+          <li><a href="#osc-cuarzo">2.2 Cristal de cuarzo</a></li>
+          <li><a href="#osc-rc">2.3 Oscilador RC</a></li>
+          <li><a href="#osc-555">2.4 Temporizador 555</a></li>
+        </ul>
+        <li><a href="#pll">3. Circuitos PLL</a></li>
+        <ul class="toc-sub toc">
+          <li><a href="#pll-concepto">3.1 Principio de funcionamiento</a></li>
+          <li><a href="#pll-bloques">3.2 Bloques constitutivos</a></li>
+          <li><a href="#pll-params">3.3 Parámetros</a></li>
+          <li><a href="#pll-apps">3.4 Aplicaciones</a></li>
+        </ul>
+        <li><a href="#visualizadores">4. Visualizadores</a></li>
+        <ul class="toc-sub toc">
+          <li><a href="#vis-7seg">4.2 Display 7 segmentos</a></li>
+          <li><a href="#vis-lcd">4.3 Display LCD</a></li>
+          <li><a href="#vis-oled">4.4 OLED y matrices</a></li>
+        </ul>
+        <li><a href="#teclados">5. Teclados</a></li>
+        <li><a href="#otros">6. Otros elementos</a></li>
+        <li><a href="#conclusion">7. Conclusión</a></li>
+        <li><a href="#biblio">8. Bibliografía</a></li>
+        <li><a href="#normativa">9. Normativa</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="tema31">
+
+    <!-- CABECERA DEL TEMA -->
+    <div class="tema-header">
+      <div class="tema-badge">Tema 31 · Especialidad 124 — Sistemas Electrónicos</div>
+
+      <!-- TÍTULO LITERAL DEL TEMARIO OFICIAL -->
+      <div style="background:var(--ink);color:var(--paper);border-radius:4px;padding:1.25rem 1.5rem;margin-bottom:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.82rem;line-height:1.7;border-left:4px solid var(--accent);">
+        <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.12em;color:#888;margin-bottom:0.5rem;">Título literal — Temario oficial BOE 13/02/1996</div>
+        <strong style="color:var(--paper);">31.</strong> Elementos y circuitos complementarios utilizados en electrónica digital. Osciladores digitales, circuitos PLL, dispositivos visualizadores, teclados, y otros. Clasificación, función, tipología y características. Aplicaciones.
+      </div>
+
+      <h1 class="tema-title">Elementos y circuitos complementarios en electrónica digital</h1>
+      <p class="tema-subtitle">Osciladores digitales, circuitos PLL, dispositivos visualizadores, teclados y otros. Clasificación, función, tipología y características. Aplicaciones.</p>
+      <div class="tema-meta">
+        <div class="meta-item">
+          <span class="meta-key">Especialidad</span>
+          <span class="meta-val">Sistemas Electrónicos P.E.S. — 590.124</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Normativa</span>
+          <span class="meta-val">RD 1578/2011 · RD 1632/2009 · RD 883/2011</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-key">Tiempo orientativo</span>
+          <span class="meta-val">~85 minutos de escritura</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ÍNDICE -->
+    <div class="indice-card">
+      <h3>Índice</h3>
+      <ol class="indice-list">
+        <li><a href="#intro"><span class="indice-num">1.</span> Introducción</a></li>
+        <li><a href="#osciladores"><span class="indice-num">2.</span> Osciladores digitales</a></li>
+        <li class="sub"><a href="#osc-concepto"><span class="indice-num">2.1</span> Concepto, función y parámetros</a></li>
+        <li class="sub"><a href="#osc-cuarzo"><span class="indice-num">2.2</span> Oscilador de cristal de cuarzo</a></li>
+        <li class="sub"><a href="#osc-rc"><span class="indice-num">2.3</span> Oscilador RC con puertas lógicas</a></li>
+        <li class="sub"><a href="#osc-555"><span class="indice-num">2.4</span> Oscilador con temporizador 555</a></li>
+        <li><a href="#pll"><span class="indice-num">3.</span> Circuitos PLL (Phase Locked Loop)</a></li>
+        <li class="sub"><a href="#pll-concepto"><span class="indice-num">3.1</span> Concepto y principio de funcionamiento</a></li>
+        <li class="sub"><a href="#pll-bloques"><span class="indice-num">3.2</span> Bloques constitutivos y parámetros</a></li>
+        <li class="sub"><a href="#pll-apps"><span class="indice-num">3.3</span> Aplicaciones del PLL</a></li>
+        <li><a href="#visualizadores"><span class="indice-num">4.</span> Dispositivos visualizadores</a></li>
+        <li class="sub"><a href="#vis-7seg"><span class="indice-num">4.1</span> Display de 7 segmentos LED</a></li>
+        <li class="sub"><a href="#vis-lcd"><span class="indice-num">4.2</span> Display LCD</a></li>
+        <li class="sub"><a href="#vis-oled"><span class="indice-num">4.3</span> Matrices de puntos y pantallas OLED</a></li>
+        <li><a href="#teclados"><span class="indice-num">5.</span> Teclados matriciales</a></li>
+        <li><a href="#otros"><span class="indice-num">6.</span> Otros elementos: optoacopladores y conversores de nivel</a></li>
+        <li><a href="#conclusion"><span class="indice-num">7.</span> Conclusión</a></li>
+        <li><a href="#biblio"><span class="indice-num">8.</span> Bibliografía</a></li>
+        <li><a href="#normativa"><span class="indice-num">9.</span> Referencias normativas</a></li>
+      </ol>
+    </div>
+
+    <!-- 1. INTRODUCCIÓN -->
+    <section id="intro">
+      <h2><span class="section-num">1.</span> Introducción</h2>
+
+      <p>El presente tema se encuadra en la especialidad de <strong>Sistemas Electrónicos (590.124)</strong> del Cuerpo de Profesores de Enseñanza Secundaria. Sus contenidos tienen aplicación directa en varios módulos donde esta especialidad tiene atribución docente reconocida: en el <strong>módulo Equipos Microprogramables</strong> del CFGS de Mantenimiento Electrónico (Real Decreto 1578/2011, de 4 de noviembre; Orden andaluza de 12 de marzo de 2013), que incluye expresamente osciladores, displays, LCD y teclados como contenidos de referencia; en el <strong>módulo 0359 Electrónica Aplicada</strong> del CFGM de Instalaciones de Telecomunicaciones (Real Decreto 1632/2009, de 30 de octubre; Orden andaluza de 19 de julio de 2010), donde los RA 7 y RA 8 abordan circuitos digitales y microprogramables; y en el <strong>módulo 0365 Instalaciones de Radiocomunicaciones</strong> del mismo ciclo, en el que el PLL constituye el núcleo tecnológico de la síntesis de frecuencias en equipos de emisión-recepción.</p>
+
+      <p>Un sistema electrónico digital no se reduce a sus circuitos lógicos combinacionales y secuenciales. Para funcionar de forma autónoma, coordinada y en comunicación con su entorno, necesita un conjunto de <strong>elementos complementarios</strong> con funciones bien diferenciadas: los <strong>osciladores</strong> generan la señal de reloj que sincroniza toda la lógica secuencial; los <strong>circuitos PLL</strong> sintetizan y estabilizan frecuencias con la precisión exigida en telecomunicaciones; los <strong>dispositivos visualizadores</strong> presentan la información procesada al usuario; los <strong>teclados matriciales</strong> recogen sus órdenes optimizando el número de conexiones; y elementos como los <strong>optoacopladores</strong> y los <strong>conversores de nivel lógico</strong> garantizan la convivencia segura de circuitos de distintas familias tecnológicas. El dominio de estos bloques, como señala Floyd (2015), es condición necesaria para el diseño, montaje y mantenimiento de cualquier sistema digital completo.</p>
+    </section>
+
+    <div class="ornament">— ✦ —</div>
+
+    <!-- 2. OSCILADORES -->
+    <section id="osciladores">
+      <h2><span class="section-num">2.</span> Osciladores digitales</h2>
+
+      <h3 id="osc-concepto"><span class="sub-num">2.1</span> Concepto, función y parámetros</h3>
+
+      <p>Un <strong>oscilador digital</strong> es un circuito electrónico autónomo que genera una señal periódica de onda cuadrada sin necesidad de señal de entrada. Su función primordial en cualquier sistema digital es proporcionar la <strong>señal de reloj</strong> (CLK), referencia temporal que sincroniza todos los elementos secuenciales: biestables, contadores, registros, microprocesadores y microcontroladores. Sin esta señal, ningún sistema digital síncrono puede operar correctamente, ya que es el reloj el que determina en qué instante se captura o se propaga la información a través de los biestables.</p>
+
+      <p>Los parámetros que caracterizan una señal de reloj son la <strong>frecuencia</strong> (f, en Hz), que determina la velocidad de procesamiento del sistema; el <strong>período</strong> (T = 1/f); el <strong>ciclo de trabajo</strong> o <em>duty cycle</em> (D = t<sub>ON</sub>/T × 100 %), que en un reloj ideal es del 50 %; y el <strong>jitter</strong>, que cuantifica las variaciones temporales de los flancos y es crítico en sistemas de alta velocidad y en comunicaciones digitales. Según Floyd (2015), la señal de reloj es el parámetro de mayor influencia sobre el rendimiento de un sistema digital, y su estabilidad condiciona directamente la fiabilidad del conjunto.</p>
+
+      <p>Los osciladores digitales se clasifican principalmente según el elemento resonador que determina su frecuencia: de cristal de cuarzo, de red RC, y con temporizador integrado. Cada tipo ofrece un compromiso diferente entre estabilidad, coste y complejidad.</p>
+
+      <h3 id="osc-cuarzo"><span class="sub-num">2.2</span> Oscilador de cristal de cuarzo</h3>
+
+      <p>El oscilador de cristal de cuarzo es el tipo más utilizado en electrónica digital cuando se requiere <strong>alta estabilidad y precisión</strong> en frecuencia. Su principio de funcionamiento se basa en el <strong>efecto piezoeléctrico</strong>: un cristal de cuarzo cortado con una geometría precisa vibra mecánicamente a una frecuencia de resonancia determinada por sus dimensiones físicas cuando se le aplica una tensión eléctrica alterna, y a su vez genera una tensión eléctrica cuando vibra. Este comportamiento dual crea un resonador de altísima selectividad, cuyo circuito equivalente presenta una resonancia serie, de baja impedancia, a la frecuencia f<sub>s</sub> = 1/(2π√LC), y una resonancia paralelo, de alta impedancia, muy próxima a la anterior. En la práctica, los osciladores Pierce, habituales con inversores CMOS, aprovechan la zona de resonancia entre ambas frecuencias para generar la oscilación de forma estable.</p>
+
+      <p>Las características más relevantes de este tipo de oscilador son su estabilidad frecuencial, del orden de ±50 ppm o inferior en modelos estándar, y la posibilidad de mejorarla mediante compensación térmica (TCXO, ±2 ppm) u horno de temperatura controlada (OCXO, &lt;0,01 ppm). Las frecuencias de operación abarcan desde los 32,768 kHz, frecuencia característica de los relojes de tiempo real, hasta centenares de MHz. Sus aplicaciones en el entorno de la especialidad son múltiples: microcontroladores como los PIC, STM32 o Arduino, FPGA, sistemas de comunicaciones y equipos GPS. En el módulo <em>0359 Electrónica Aplicada</em> del CFGM de Instalaciones de Telecomunicaciones, el RA 7 sobre circuitos digitales y el RA 8 sobre circuitos microprogramables contemplan estos osciladores como base de los sistemas que el alumnado debe montar y verificar.</p>
+
+      <h3 id="osc-rc"><span class="sub-num">2.3</span> Oscilador RC con puertas lógicas</h3>
+
+      <p>Cuando la estabilidad del cristal no es necesaria, la solución más sencilla y económica consiste en aprovechar la <strong>constante de tiempo RC</strong> de una red resistencia-condensador combinada con la no linealidad de un inversor CMOS. Al cargarse el condensador a través de la resistencia hasta superar el umbral de conmutación del inversor, la salida cambia de estado, invirtiendo el proceso y generando así la oscilación. La frecuencia resultante es aproximadamente f ≈ 1/(2,2·R·C), aunque varía con la temperatura y la tolerancia de los componentes, lo que limita su estabilidad a valores del orden del ±5 %. Este tipo de oscilador es adecuado para temporizadores simples, generadores de señal de prueba y cualquier aplicación donde el coste prime sobre la precisión.</p>
+
+      <h3 id="osc-555"><span class="sub-num">2.4</span> Oscilador con temporizador NE555</h3>
+
+      <p>El <strong>NE555</strong>, desarrollado por Signetics en 1971, es el circuito integrado más utilizado históricamente como generador de señales en el rango de frecuencias bajas y medias. Su versatilidad reside en que puede configurarse en dos modos: el <strong>modo monoestable</strong>, que genera un único pulso de duración determinada por la constante de carga de un condensador (T = 1,1·R·C), y el <strong>modo astable</strong>, en el que oscila libremente produciendo una señal cuadrada continua. En modo astable, la frecuencia viene dada por f = 1,44/[(R<sub>A</sub> + 2R<sub>B</sub>)·C] y el ciclo de trabajo por D = (R<sub>A</sub> + R<sub>B</sub>)/(R<sub>A</sub> + 2R<sub>B</sub>), lo que permite ajustar ambos parámetros de forma independiente eligiendo adecuadamente los valores de R<sub>A</sub>, R<sub>B</sub> y C. Con una tensión de alimentación entre 5 V y 15 V y una corriente de salida de hasta 200 mA, este componente se emplea en generadores de PWM, temporizadores, alarmas y drivers de actuadores. Tanto Boylestad y Nashelsky (2013) como Scherz y Monk (2016) lo citan como elemento de referencia en circuitos de temporización y oscilación de propósito general.</p>
+    </section>
+
+    <div class="ornament">— ✦ —</div>
+
+    <!-- 3. PLL -->
+    <section id="pll">
+      <h2><span class="section-num">3.</span> Circuitos PLL (Phase Locked Loop)</h2>
+
+      <h3 id="pll-concepto"><span class="sub-num">3.1</span> Concepto y principio de funcionamiento</h3>
+
+      <p>El <strong>PLL o lazo de enganche en fase</strong> es un sistema electrónico realimentado cuyo objetivo es hacer que la frecuencia y la fase de una señal generada internamente sigan, de forma precisa y continua, a una señal de referencia externa. Haykin y Moher (2009) lo describen como uno de los bloques fundamentales de los sistemas de comunicaciones modernos, presente en prácticamente todos los equipos de emisión y recepción de radiofrecuencia.</p>
+
+      <p>El principio de funcionamiento se basa en la <strong>realimentación negativa de fase</strong>. El sistema compara permanentemente la fase de la señal de referencia con la fase de la señal que genera su oscilador interno (VCO). Cualquier diferencia entre ambas produce una tensión de error proporcional al desfase. Esa tensión, convenientemente filtrada, actúa sobre el VCO corrigiendo su frecuencia hasta que la diferencia de fase se anula o se estabiliza en un valor mínimo constante: se dice entonces que el PLL está <strong>enganchado</strong> o en estado de <em>lock</em>. Una vez enganchado, la frecuencia de salida del VCO es igual a la de referencia, o bien un múltiplo entero de ella si se incorpora un divisor de frecuencia en la rama de realimentación.</p>
+
+      <h3 id="pll-bloques"><span class="sub-num">3.2</span> Bloques constitutivos y parámetros</h3>
+
+      <p>Un PLL se compone de cuatro bloques funcionales esenciales. El primero es el <strong>comparador de fase</strong> o <em>Phase Detector</em> (PD), que genera una señal cuya amplitud media es proporcional a la diferencia de fase entre la referencia y la señal realimentada. El tipo más utilizado en PLLs modernos es el <em>Phase Frequency Detector</em> (PFD), que detecta simultáneamente diferencias de fase y de frecuencia, acelerando el proceso de enganche. El segundo bloque es el <strong>filtro paso bajo</strong>, que elimina las componentes de alta frecuencia del error y proporciona la tensión continua de control. El ancho de banda de este filtro determina la velocidad de respuesta del lazo y su estabilidad, caracterizada por el factor de amortiguamiento ζ; el valor óptimo ζ = 0,707 garantiza una respuesta amortiguada sin oscilación. El tercer bloque es el <strong>VCO</strong> (<em>Voltage Controlled Oscillator</em>), cuya frecuencia varía linealmente con la tensión de control según la expresión f<sub>out</sub> = f<sub>0</sub> + K<sub>VCO</sub>·V<sub>ctrl</sub>, siendo K<sub>VCO</sub> la sensibilidad del oscilador en Hz/V y f<sub>0</sub> su frecuencia libre. El cuarto bloque, presente en los PLLs que realizan síntesis de frecuencias, es el <strong>divisor de frecuencia ÷N</strong>, que divide la salida del VCO antes de realimentarla, de modo que en el estado de enganche se cumple f<sub>out</sub> = N·f<sub>ref</sub>, permitiendo obtener frecuencias mucho más altas que la referencia.</p>
+
+      <p>Entre los parámetros que caracterizan el comportamiento de un PLL destacan el <strong>rango de captura</strong> (margen de frecuencias desde las que el sistema puede engancharse partiendo de libre) y el <strong>rango de seguimiento</strong> (margen dentro del cual mantiene el enganche una vez adquirido, siempre mayor o igual al de captura), así como el <strong>tiempo de enganche</strong> y el <strong>ruido de fase</strong>, este último expresado en dBc/Hz y determinante de la calidad espectral de la señal sintetizada. El circuito integrado CD4046 (familia CMOS) es el PLL discreto más utilizado en aplicaciones de laboratorio y enseñanza. En FPGAs modernas, los PLLs digitales fraccionales integrados (como los MMCM de Xilinx o los PLLs de Intel) permiten generar múltiples dominios de reloj independientes con resolución de frecuencia inferior a 1 Hz.</p>
+
+      <h3 id="pll-apps"><span class="sub-num">3.3</span> Aplicaciones del PLL</h3>
+
+      <p>La aplicación más característica del PLL en el ámbito de la especialidad es la <strong>síntesis de frecuencias</strong>: a partir de un único cristal de cuarzo de referencia, el sistema es capaz de generar cualquier frecuencia de un conjunto discreto con la misma estabilidad que el cristal. Esta técnica es la base de todos los transceptores de radiocomunicaciones modernos, desde los equipos de radioaficionados hasta las estaciones base de telefonía móvil. El módulo <em>Mantenimiento de Equipos de Radiocomunicaciones</em> del CFGS de Mantenimiento Electrónico (Orden andaluza de 12 de marzo de 2013) incluye expresamente los «módulos PLL» como contenido de referencia en equipos de radiodifusión AM, FM y TV. Igualmente, el módulo <em>0365 Instalaciones de Radiocomunicaciones</em> del CFGM de Instalaciones de Telecomunicaciones contempla la síntesis de frecuencias como competencia nuclear del técnico.</p>
+
+      <p>Otras aplicaciones igualmente relevantes son la <strong>demodulación de FM</strong> (el VCO sigue la portadora modulada y la tensión de control reproduce la señal moduladora), la <strong>recuperación de reloj</strong> en receptores digitales que deben sincronizarse con el transmisor sin referencia explícita (UART, USB, Ethernet), y la <strong>limpieza de jitter</strong> en distribuidores de reloj de alta velocidad.</p>
+    </section>
+
+    <div class="ornament">— ✦ —</div>
+
+    <!-- 4. VISUALIZADORES -->
+    <section id="visualizadores">
+      <h2><span class="section-num">4.</span> Dispositivos visualizadores</h2>
+
+      <p>Los <strong>dispositivos visualizadores</strong> constituyen la interfaz de salida entre el sistema digital y el usuario, permitiendo presentar información numérica, alfanumérica o gráfica de forma inteligible. Se clasifican según su tecnología de generación de imagen en tres grandes familias: los basados en <strong>LED</strong> (emisivos, alta luminosidad, consumo apreciable), los basados en <strong>LCD</strong> (no emisivos, bajo consumo, necesitan luz ambiental o retroiluminación) y los basados en <strong>OLED</strong> (emisivos por píxel, contraste infinito, sin retroiluminación). El módulo <em>Equipos Microprogramables</em> del CFGS de Mantenimiento Electrónico incluye como contenido de referencia la configuración de displays, LCD y teclados, lo que refleja la importancia de estos elementos en el perfil profesional del técnico.</p>
+
+      <h3 id="vis-7seg"><span class="sub-num">4.1</span> Display de 7 segmentos LED</h3>
+
+      <p>El display de 7 segmentos es el visualizador de dígitos más elemental y extendido en instrumentación y paneles de control. Está formado por siete LEDs denominados con las letras a a g, dispuestos en forma de cifra ocho, más un punto decimal. La activación selectiva de combinaciones de segmentos permite representar cualquier dígito del 0 al 9 y ciertos caracteres alfanuméricos. Existen dos configuraciones eléctricas: en <strong>ánodo común</strong> todos los ánodos se conectan a V<sub>CC</sub> y cada segmento se activa con nivel lógico bajo, mientras que en <strong>cátodo común</strong> todos los cátodos van a masa y la activación se realiza con nivel alto. La conversión entre el código BCD de entrada y las señales de activación de los siete segmentos se realiza automáticamente mediante un <strong>decodificador BCD–7 segmentos</strong> como el 74LS47 (para ánodo común) o el 74LS48 (para cátodo común), lo que simplifica enormemente el diseño. Cuando se necesita controlar varios dígitos simultáneamente con el mínimo número de líneas, se recurre a la <strong>multiplexación temporal</strong>: los displays se activan secuencialmente a una frecuencia superior a 50 Hz, de modo que la persistencia visual del ojo humano los percibe como encendidos de forma continua.</p>
+
+      <h3 id="vis-lcd"><span class="sub-num">4.2</span> Display LCD</h3>
+
+      <p>Los displays de <strong>cristal líquido</strong> (LCD) modulan la luz ambiente o una retroiluminación posterior mediante la propiedad de los cristales líquidos de rotar el plano de polarización de la luz bajo la acción de un campo eléctrico. Su ventaja fundamental frente a los displays LED es el <strong>bajo consumo</strong>, lo que los hace idóneos para equipos de batería. Una característica crítica de su alimentación es que requieren una <strong>señal alterna</strong>, nunca continua, para evitar la electrolisis y la degradación irreversible de las moléculas de cristal líquido; la frecuencia de esta señal oscila típicamente entre 30 y 200 Hz. Los tipos más comunes en electrónica de aplicación son el LCD de 7 segmentos, para instrumentos de medida y relojes; el <strong>LCD alfanumérico con controlador HD44780</strong>, en formato 16×2 o 20×4 caracteres, ampliamente utilizado con microcontroladores a través de una interfaz paralela de 4 u 8 bits más señales de control RS, RW y E; y las pantallas <strong>TFT-LCD</strong> a color, que constituyen la base de los monitores modernos y los paneles de smartphones.</p>
+
+      <h3 id="vis-oled"><span class="sub-num">4.3</span> Matrices de puntos y pantallas OLED</h3>
+
+      <p>Las <strong>matrices de puntos LED</strong> organizan un conjunto de LEDs en filas y columnas (típicamente 8×8) y se controlan mediante la misma técnica de multiplexación temporal descrita para los displays de 7 segmentos. El controlador MAX7219 permite gestionar hasta 64 LEDs en matriz o hasta 8 dígitos de 7 segmentos a través de una interfaz SPI de solo tres hilos, reduciendo drásticamente el número de conexiones necesarias. Las <strong>pantallas OLED</strong>, basadas en diodos orgánicos electroluminiscentes, representan el avance más relevante de la última década en visualización para sistemas embebidos. Al emitir luz propia cada píxel, eliminan la necesidad de retroiluminación, lo que se traduce en contraste prácticamente infinito (el negro es simplemente un píxel apagado), tiempos de respuesta de microsegundos y consumo mucho menor que los LCD retroiluminados. El controlador SSD1306, con resolución 128×64 píxeles e interfaz I²C o SPI, se ha convertido en la solución de referencia para wearables, sistemas IoT y paneles de instrumentación embebida (Scherz y Monk, 2016).</p>
+    </section>
+
+    <div class="ornament">— ✦ —</div>
+
+    <!-- 5. TECLADOS -->
+    <section id="teclados">
+      <h2><span class="section-num">5.</span> Teclados matriciales</h2>
+
+      <p>El teclado es el dispositivo de entrada de datos más común en sistemas embebidos sin interfaz gráfica. La solución más eficiente para conectar un número elevado de teclas con un mínimo de líneas es la <strong>organización matricial</strong>: las N×M teclas se disponen en una cuadrícula de N filas y M columnas, de modo que el número de conexiones necesarias se reduce de N×M a N+M. Un teclado de 16 teclas (4×4), por ejemplo, requiere únicamente 8 líneas de E/S en lugar de 16.</p>
+
+      <p>El principio de funcionamiento consiste en que el microprocesador o microcontrolador activa sucesivamente cada fila (salida en nivel bajo) mientras lee el estado de las columnas (entradas con resistencia de pull-up interna o externa). Si una tecla está pulsada en la fila activa en ese momento, la columna correspondiente se pone a nivel bajo, permitiendo identificar de forma unívoca la tecla accionada mediante el par fila-columna. Este proceso de exploración cíclica se denomina <strong>escaneo</strong> y debe ejecutarse a una frecuencia suficientemente alta para que ninguna pulsación quede sin detectar.</p>
+
+      <p>Una dificultad inherente a las teclas mecánicas es el fenómeno de <strong>rebote</strong> (<em>bounce</em>): en el momento de la pulsación o la liberación, el contacto oscila entre los estados abierto y cerrado durante un intervalo de entre 5 y 20 ms, generando múltiples transiciones falsas que el sistema puede interpretar como varias pulsaciones. La solución hardware más directa combina una red RC con un <strong>disparador Schmitt</strong> (por ejemplo, el 74HC14), cuya histéresis absorbe las oscilaciones de la señal antes de que lleguen al sistema lógico. La solución software, más económica y habitual en sistemas con microcontrolador, consiste en realizar una segunda lectura de la tecla transcurridos aproximadamente 20 ms desde la primera; si el estado coincide, la pulsación se considera válida. Una vez identificada la tecla, su posición en la matriz se traduce a un <strong>código de barrido</strong> (<em>scan code</em>) y, mediante una tabla de conversión en software, al código de la aplicación correspondiente (ASCII u otro). Los codificadores de teclado hardware como el 74C922 realizan todo este proceso de forma autónoma, proporcionando el código binario de la tecla más una señal de <em>dato disponible</em> que libera completamente al procesador de la tarea de escaneo.</p>
+    </section>
+
+    <div class="ornament">— ✦ —</div>
+
+    <!-- 6. OTROS ELEMENTOS -->
+    <section id="otros">
+      <h2><span class="section-num">6.</span> Otros elementos complementarios: optoacopladores y conversores de nivel</h2>
+
+      <p>Junto a los elementos tratados en los apartados anteriores, existen otros componentes de interfaz que resultan imprescindibles para integrar sistemas digitales en entornos reales, donde conviven circuitos de control de baja tensión con cargas de potencia o con dispositivos de distintas familias lógicas.</p>
+
+      <p>El <strong>optoacoplador</strong> resuelve el problema del aislamiento eléctrico entre dos partes de un sistema. Su principio de funcionamiento es sencillo: un LED emisor convierte la señal eléctrica de entrada en luz, que es captada por un fototransistor receptor en el mismo encapsulado, reconvirtiendo la señal al dominio eléctrico. La clave está en que entre el LED y el fototransistor no existe conexión eléctrica directa, lo que proporciona un <strong>aislamiento galvánico</strong> completo que puede alcanzar tensiones de aislamiento de 5 kV en encapsulados DIP estándar. El parámetro fundamental es el <strong>CTR</strong> (<em>Current Transfer Ratio</em>), definido como I<sub>C</sub>/I<sub>F</sub> × 100 %, que indica la eficiencia de transferencia de corriente entre emisor y receptor, típicamente entre el 50 y el 300 %. La velocidad de respuesta varía de varias decenas de microsegundos en dispositivos lentos como el 4N25 hasta pocos nanosegundos en dispositivos rápidos como el 6N137, diseñados para comunicaciones digitales de alta velocidad. Sus aplicaciones principales son el accionamiento aislado de relés y triacs, la interfaz entre microcontroladores y sistemas industriales de 24 V, y el aislamiento de la etapa de control en fuentes de alimentación conmutadas. (Boylestad y Nashelsky, 2013).</p>
+
+      <p>Los <strong>conversores de nivel lógico</strong> (<em>level shifters</em>) resuelven otro problema igualmente frecuente: la coexistencia en un mismo sistema de dispositivos que operan a tensiones de alimentación distintas. La reducción progresiva de las tensiones de alimentación en la electrónica digital —desde los 5 V de la lógica TTL clásica hasta los 3,3 V de los sistemas LVC, los 1,8 V de las FPGAs modernas o incluso los 1,2 V de los dispositivos más avanzados— hace que sea habitual tener que comunicar un Arduino (5 V) con un módulo WiFi ESP32 (3,3 V) o un procesador de señal con periféricos legacy. Conectar directamente estos dispositivos sin adaptar los niveles puede dañarlos de forma irreversible. Las soluciones van desde redes resistivas simples con diodos (para señales unidireccionales) hasta circuitos integrados dedicados como el TXS0108 de Texas Instruments, que proporciona ocho canales bidireccionales con detección automática de dirección, válidos para buses I²C y SPI entre tensiones de 1,2 V y 5 V.</p>
+    </section>
+
+    <div class="ornament">— ✦ —</div>
+
+    <!-- 7. CONCLUSIÓN -->
+    <section id="conclusion">
+      <h2><span class="section-num">7.</span> Conclusión</h2>
+      <div class="conclusion-box">
+        <p>El presente tema ha permitido recorrer de forma sistemática el conjunto de elementos complementarios que hacen posible que un sistema de electrónica digital funcione de manera autónoma, eficiente y en comunicación con su entorno. Los <strong style="color:white">osciladores</strong> —de cuarzo, RC o con NE555— aportan la base temporal sin la que ninguna lógica secuencial puede operar; los <strong style="color:white">circuitos PLL</strong> extienden esa capacidad al dominio de las frecuencias de radiocomunicaciones, siendo el núcleo de la síntesis de frecuencias en todos los equipos de emisión-recepción modernos; los <strong style="color:white">visualizadores</strong> —de 7 segmentos LED, LCD alfanuméricos y OLED— cierran el bucle de comunicación con el usuario ofreciendo información procesada de forma inteligible; los <strong style="color:white">teclados matriciales</strong>, con sus mecanismos de escaneo y antirebote, completan la interfaz recogiendo las órdenes del usuario con un mínimo de recursos hardware; y los <strong style="color:white">optoacopladores y conversores de nivel lógico</strong> garantizan la integridad y seguridad del sistema cuando conviven circuitos de distintas familias tecnológicas o tensiones de alimentación.</p>
+        <p>La relación entre estos bloques no es meramente funcional sino también epistemológica: el correcto dimensionamiento de un oscilador de cuarzo es condición previa para que el PLL pueda operar con la estabilidad requerida; la frecuencia de multiplexación de los visualizadores LED debe derivarse del oscilador del sistema; y la fiabilidad del escaneo del teclado depende del correcto tratamiento del rebote, sea por hardware o por software. Esta interdependencia refleja la naturaleza sistémica de la electrónica digital, tal como la describe Floyd (2015) al analizar los sistemas microprocesados como integración de bloques funcionales complementarios.</p>
+        <p>Desde la perspectiva docente, los contenidos de este tema son de aplicación directa en los módulos con atribución a la especialidad ya señalados en la introducción. La tendencia actual hacia la integración de todos estos bloques en un único SoC (<em>System on Chip</em>) no reduce la necesidad de conocerlos individualmente; al contrario, la hace más imprescindible, pues el diagnóstico de averías en sistemas altamente integrados exige comprender con precisión la función de cada bloque y las señales que los caracterizan.</p>
+      </div>
+    </section>
+
+    <div class="ornament">— ✦ —</div>
+
+    <!-- 8. BIBLIOGRAFÍA -->
+    <section id="biblio">
+      <h2><span class="section-num">8.</span> Bibliografía</h2>
+      <ul class="biblio-list">
+        <li class="biblio-item">
+          <span class="biblio-authors">Boylestad, R.L. &amp; Nashelsky, L. (2013).</span>
+          <span class="biblio-title"> Electronic Devices and Circuit Theory</span> (11.ª ed.).
+          <span class="biblio-pub"> Pearson Education.</span>
+          <div class="biblio-note">Referencia fundamental para el análisis de dispositivos electrónicos activos, optoacopladores y circuitos de oscilación.</div>
+        </li>
+        <li class="biblio-item">
+          <span class="biblio-authors">Floyd, T.L. (2015).</span>
+          <span class="biblio-title"> Digital Fundamentals</span> (11.ª ed.).
+          <span class="biblio-pub"> Pearson Education.</span>
+          <div class="biblio-note">Obra de referencia estándar en electrónica digital; aborda osciladores digitales, displays, teclados y sistemas microprocesados.</div>
+        </li>
+        <li class="biblio-item">
+          <span class="biblio-authors">Haykin, S. &amp; Moher, M. (2009).</span>
+          <span class="biblio-title"> Communication Systems</span> (5.ª ed.).
+          <span class="biblio-pub"> John Wiley &amp; Sons.</span>
+          <div class="biblio-note">Referencia canónica en sistemas de comunicaciones; base teórica del PLL, síntesis de frecuencias y modulación.</div>
+        </li>
+        <li class="biblio-item">
+          <span class="biblio-authors">Scherz, P. &amp; Monk, S. (2016).</span>
+          <span class="biblio-title"> Practical Electronics for Inventors</span> (4.ª ed.).
+          <span class="biblio-pub"> McGraw-Hill Education.</span>
+          <div class="biblio-note">Cobertura aplicada de osciladores, optoacopladores, displays LCD/LED y conversores de nivel lógico. Amplia difusión en formación técnica.</div>
+        </li>
+        <li class="biblio-item">
+          <span class="biblio-authors">Texas Instruments (2023).</span>
+          <span class="biblio-title"> CD4046B Phase-Locked Loop: A Versatile Building Block for Micropower Digital and Analog Applications</span>
+          <span class="biblio-pub"> (Application Report SCHA002A). Recuperado de https://www.ti.com</span>
+          <div class="biblio-note">Referencia técnica primaria del fabricante con especificaciones completas y circuitos de aplicación del PLL.</div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 9. NORMATIVA -->
+    <section id="normativa">
+      <h2><span class="section-num">9.</span> Referencias normativas</h2>
+      <ul class="norm-list">
+        <li class="norm-item"><strong>Ley Orgánica 3/2022, de 31 de marzo,</strong> de ordenación e integración de la Formación Profesional.</li>
+        <li class="norm-item"><strong>Real Decreto 659/2023, de 18 de julio,</strong> por el que se desarrolla la ordenación del Sistema de Formación Profesional.</li>
+        <li class="norm-item"><strong>Real Decreto 1632/2009, de 30 de octubre,</strong> por el que se establece el título de Técnico en Instalaciones de Telecomunicaciones y se fijan sus enseñanzas mínimas. Atribución a la especialidad Sistemas Electrónicos en los módulos 0359, 0361 y 0365.</li>
+        <li class="norm-item"><strong>Orden de 19 de julio de 2010</strong> (Junta de Andalucía), por la que se desarrolla el currículo del CFGM de Instalaciones de Telecomunicaciones. BOJA núm. 171, de 1 de septiembre de 2010.</li>
+        <li class="norm-item"><strong>Real Decreto 1578/2011, de 4 de noviembre,</strong> por el que se establece el título de Técnico Superior en Mantenimiento Electrónico y se fijan sus enseñanzas mínimas. Atribución a Sistemas Electrónicos en los módulos Circuitos Electrónicos Analógicos, Equipos Microprogramables, Mantenimiento de Equipos de Radiocomunicaciones e Infraestructuras y Desarrollo del Mantenimiento Electrónico (Anexo III A).</li>
+        <li class="norm-item"><strong>Orden de 12 de marzo de 2013</strong> (Junta de Andalucía), por la que se desarrolla el currículo del CFGS de Mantenimiento Electrónico. Displays, teclados y módulos PLL como contenidos de referencia explícitos.</li>
+        <li class="norm-item"><strong>Real Decreto 883/2011, de 24 de junio,</strong> por el que se establece el título de Técnico Superior en Sistemas de Telecomunicaciones e Informáticos y se fijan sus enseñanzas mínimas. Atribución a Sistemas Electrónicos en módulos de elementos de sistemas de telecomunicaciones y radiocomunicaciones.</li>
+        <li class="norm-item"><strong>Real Decreto 842/2002, de 2 de agosto,</strong> Reglamento Electrotécnico de Baja Tensión (REBT) e Instrucciones Técnicas Complementarias.</li>
+        <li class="norm-item"><strong>Ley 31/1995, de 8 de noviembre,</strong> de Prevención de Riesgos Laborales.</li>
+        <li class="norm-item"><strong>JEDEC Standard JESD8C.01.</strong> Interface Standard for Nominal 1.8V/Variable Supply Digital Integrated Circuits.</li>
+      </ul>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // Barra de progreso de lectura
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const scrolled = doc.scrollTop || document.body.scrollTop;
+    const height = doc.scrollHeight - doc.clientHeight;
+    document.getElementById('progress').style.width = (scrolled / height * 100) + '%';
+  });
+
+  // Resaltar sección activa en TOC
+  const sections = document.querySelectorAll('section, .tema-header');
+  const tocLinks = document.querySelectorAll('.toc a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        tocLinks.forEach(link => {
+          link.style.color = '';
+          link.style.fontWeight = '';
+        });
+        const active = document.querySelector(`.toc a[href="#${entry.target.id}"]`);
+        if (active) {
+          active.style.color = 'var(--accent)';
+          active.style.fontWeight = '600';
+        }
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
